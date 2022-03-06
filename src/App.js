@@ -1,43 +1,36 @@
 import './App.css';
-import React, {useState,useEffect} from 'react';
+import React, {useState} from 'react';
 import { Modal,Button,Form } from 'react-bootstrap';
+
+
+
 function App() {
   const initialValues={username:"",comment:"",rating:""}; 
   const[formData,setFormData] = useState(initialValues);
-  const[formErrors,setFormErrors] = useState({});
-  const[isSubmit,setIsSubmit] = useState(false);
+
   const handleChange=(e)=>{
-    console.log(e.target);
     const {name,value} = e.target;
     setFormData({...formData,[name]:value});
-    console.log(formData);
   };
   const submitHandler=(e)=>{
     e.preventDefault();
-    validate(formData);
-    setFormErrors(validate(formData));
-    setIsSubmit(true);
-  }
-  useEffect(()=>{
-    console.log(formErrors);
-    if(Object.keys(formErrors).length === 0 && isSubmit){
-      console.log(formData);
+    console.log(formData);
+    if(formData.username.length<2){
+      alert("username must be greater than 2 characters");
+    
     }
-  },[formErrors])
-  const validate=(values)=>{
-const errors={}
-if(!values.username){
-errors.username = "username is required";
-}
-else if(values.username<2){
-  errors.username.length = "username must be greater than 2 characters";
+    else if (formData.username.length > 15){
+      alert("username cannot exceed more than 15 characters");
+    }
+    else{
+      console.log(formData);
+      alert(JSON.stringify(formData));
+    }
 
-}
-else if (values.username > 10){
-  errors.username.length="username cannot exceed more than 10 characters";
-}
-return errors;
-  };
+  }
+
+
+
   
   return (
     <div>
@@ -66,15 +59,16 @@ return errors;
   <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
     <Form.Label>Your Name</Form.Label>
     <Form.Control type="name" value={formData.username}  name="username" onChange={handleChange} placeholder="Your Name" />
-    <p>{formErrors.username}</p>
-
+    {console.log(formData)}
+{((formData.username.length<2)||(formData.username.length > 15))?<p style={{"color":"red"}}>The username must be greater than 2 characters and less than 15 characters</p>:null}
   </Form.Group>
   <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
     <Form.Label>Comment</Form.Label>
     <Form.Control as="textarea" name="comment" onChange={handleChange} value={formData.comment} rows={5} />
   </Form.Group>
-  <Button variant="primary" type="submit" name="submit">Submit</Button>
+  <Button variant="primary" type="submit"  name="submit">Submit</Button>
 
+  
 </Form>
   </Modal.Body>
     </Modal.Dialog>
